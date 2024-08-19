@@ -59,4 +59,6 @@ Follow these steps to build and run the project:
 
 The application will be available at http://localhost:8080.
 
+Note: Avoiding cors, changing origin `http://localhost:5173` to your client url call in `SecurityConfiguration.java`.
+
 Feel free to explore the code, customize it to your needs, and use it as a reference for implementing secure authentication and authorization in your own Spring Boot projects.

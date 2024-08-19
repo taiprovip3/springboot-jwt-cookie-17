@@ -35,9 +35,6 @@ public class AuthController {
     public ResponseEntity<LoginResponse> logout(
             @CookieValue(name = "access_token", required = false) String accessToken,
             @CookieValue(name = "refresh_token", required = false) String refreshToken) {
-    	System.out.println("Loggin out..........................................................");
-    	System.out.println("accessToken=" + accessToken);
-    	System.out.println("refreshToken=" + refreshToken);
         return authService.logout(accessToken, refreshToken);
     }
     
