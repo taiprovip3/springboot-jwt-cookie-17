@@ -1,7 +1,6 @@
 package com.jwtcookie.jwttokencookie;
 
 import com.jwtcookie.jwttokencookie.enums.Roles;
-import com.jwtcookie.jwttokencookie.model.Permission;
 import com.jwtcookie.jwttokencookie.model.Role;
 import com.jwtcookie.jwttokencookie.model.User;
 import com.jwtcookie.jwttokencookie.repository.RoleRepository;
@@ -12,8 +11,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.transaction.annotation.Transactional;
-
+	
 import java.util.List;
 
 @SpringBootApplication

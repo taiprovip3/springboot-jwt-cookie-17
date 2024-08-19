@@ -1,7 +1,6 @@
 package com.jwtcookie.jwttokencookie.jwt;
 
 import com.jwtcookie.jwttokencookie.enums.TokenType;
-import com.jwtcookie.jwttokencookie.exception.AppException;
 import com.jwtcookie.jwttokencookie.model.Token;
 import com.jwtcookie.jwttokencookie.repository.TokenRepository;
 import com.jwtcookie.jwttokencookie.repository.UserRepository;
@@ -12,17 +11,12 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.ZoneOffset;
-import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
 import java.util.Base64;
 import java.util.Date;

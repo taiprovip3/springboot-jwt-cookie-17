@@ -4,7 +4,6 @@ import com.jwtcookie.jwttokencookie.model.Token;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
 import java.util.Map;
 

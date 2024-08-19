@@ -1,10 +1,8 @@
 package com.jwtcookie.jwttokencookie.security;
 
 import com.jwtcookie.jwttokencookie.enums.Permissions;
-import com.jwtcookie.jwttokencookie.jwt.AuthenticationFilterImpl;
 import com.jwtcookie.jwttokencookie.jwt.JwtAuthEntryPoint;
 import com.jwtcookie.jwttokencookie.jwt.JwtAuthFilter;
-import com.jwtcookie.jwttokencookie.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -60,6 +58,7 @@ public class SecurityConfiguration {
                     authorize.requestMatchers(ALLOWED_URLS).permitAll();
                     authorize.requestMatchers("/api/auth/login").permitAll();
                     authorize.requestMatchers("/api/auth/refresh").permitAll();
+                    authorize.requestMatchers("/api/auth/logout").hasAuthority(Permissions.USER_READ.getName());
                     authorize.requestMatchers(HttpMethod.GET, "/api/users/**").hasAuthority(Permissions.USER_READ.getName());
                     authorize.requestMatchers(HttpMethod.POST, "/api/users/**").hasAuthority(Permissions.USER_CREATE.getName());
                     authorize.requestMatchers(HttpMethod.PUT, "/api/users/**").hasAuthority(Permissions.USER_UPDATE.getName());
@@ -74,6 +73,10 @@ public class SecurityConfiguration {
         http
 //                .formLogin(login -> login.loginProcessingUrl("/api/auth/login"))
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+//        http
+//        		.logout()
+//        		.logoutUrl("/api/auth/logout")
+//        		.logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext());
         return http.build();
     }
     @Bean

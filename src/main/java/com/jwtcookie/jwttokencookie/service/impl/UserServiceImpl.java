@@ -9,7 +9,6 @@ import com.jwtcookie.jwttokencookie.repository.RoleRepository;
 import com.jwtcookie.jwttokencookie.repository.UserRepository;
 import com.jwtcookie.jwttokencookie.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

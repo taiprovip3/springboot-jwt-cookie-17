@@ -1,7 +1,6 @@
 package com.jwtcookie.jwttokencookie.jwt;
 
 import com.jwtcookie.jwttokencookie.exception.ResourceNotFoundException;
-import com.jwtcookie.jwttokencookie.model.User;
 import com.jwtcookie.jwttokencookie.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

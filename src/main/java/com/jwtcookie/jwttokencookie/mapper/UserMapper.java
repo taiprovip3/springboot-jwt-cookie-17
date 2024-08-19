@@ -5,7 +5,6 @@ import com.jwtcookie.jwttokencookie.dto.UserLoggedDto;
 import com.jwtcookie.jwttokencookie.model.Permission;
 import com.jwtcookie.jwttokencookie.model.User;
 
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class UserMapper {

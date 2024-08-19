@@ -1,6 +1,5 @@
 package com.jwtcookie.jwttokencookie.jwt;
 
-import com.jwtcookie.jwttokencookie.util.Constants;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;

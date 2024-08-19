@@ -1,7 +1,6 @@
 package com.jwtcookie.jwttokencookie.controller;
 
 import com.jwtcookie.jwttokencookie.dto.UserDto;
-import com.jwtcookie.jwttokencookie.model.User;
 import com.jwtcookie.jwttokencookie.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

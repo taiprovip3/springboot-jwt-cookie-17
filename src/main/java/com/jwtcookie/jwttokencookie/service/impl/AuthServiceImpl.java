@@ -15,7 +15,6 @@ import com.jwtcookie.jwttokencookie.service.AuthService;
 import com.jwtcookie.jwttokencookie.util.CookieUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpCookie;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,8 +23,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -52,17 +49,19 @@ public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager authenticationManager;
     @Override
     public ResponseEntity<LoginResponse> login(LoginRequest loginRequest, String accessToken, String refreshToken) {
+    	// 01. Sping security login account
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.username(), loginRequest.password()
                 )
         );
 
+        // 02. Xóa bớt user token dưới db
         String username = loginRequest.username();
-
         User user = userRepository.findByUsername(username).orElseThrow(
                 () -> new ResourceNotFoundException("User not found")
         );
+        revokeAllTokenOfUser(user);
 
         boolean accessTokenValid = tokenProvider.validateToken(accessToken);
         boolean refreshTokenValid = tokenProvider.validateToken(refreshToken);
@@ -70,17 +69,16 @@ public class AuthServiceImpl implements AuthService {
         HttpHeaders responseHeaders = new HttpHeaders();
         Token newAccessToken, newRefreshToken;
 
-        revokeAllTokenOfUser(user);
-
+        // 03. Nếu access & refresh token trong cookie ko tồn tại hoặc ko hợp lệ
         if(!accessTokenValid && !refreshTokenValid) {
-            newAccessToken = tokenProvider.generateAccessToken(
+            newAccessToken = tokenProvider.generateAccessToken (
                     Map.of("role", user.getRole().getAuthority()),
                     accessTokenDurationMinute,
                     ChronoUnit.MINUTES,
                     user
             );
 
-            newRefreshToken = tokenProvider.generateRefreshToken(
+            newRefreshToken = tokenProvider.generateRefreshToken (
                     refreshTokenDurationDay,
                     ChronoUnit.DAYS,
                     user
@@ -96,6 +94,7 @@ public class AuthServiceImpl implements AuthService {
             addRefreshTokenCookie(responseHeaders, newRefreshToken);
         }
 
+        // 04. Nếu refreshToken trong cookie hợp lệ
         if(!accessTokenValid && refreshTokenValid) {
             newAccessToken = tokenProvider.generateAccessToken(
                     Map.of("role", user.getRole().getAuthority()),
@@ -107,6 +106,7 @@ public class AuthServiceImpl implements AuthService {
             addAccessTokenCookie(responseHeaders, newAccessToken);
         }
 
+        // 05. Nếu accessToken & refreshToken trong cookie hợp lệ
         if(accessTokenValid && refreshTokenValid) {
             newAccessToken = tokenProvider.generateAccessToken(
                     Map.of("role", user.getRole().getAuthority()),
@@ -137,6 +137,7 @@ public class AuthServiceImpl implements AuthService {
 
         return ResponseEntity.ok().headers(responseHeaders).body(loginResponse);
     }
+    
     @Override
     public ResponseEntity<LoginResponse> refresh(String refreshToken) {
         boolean refreshTokenValid = tokenProvider.validateToken(refreshToken);
@@ -163,6 +164,7 @@ public class AuthServiceImpl implements AuthService {
 
         return ResponseEntity.ok().headers(responseHeaders).body(loginResponse);
     }
+    
     @Override
     public ResponseEntity<LoginResponse> logout(String accessToken, String refreshToken) {
         SecurityContextHolder.clearContext();
@@ -183,6 +185,7 @@ public class AuthServiceImpl implements AuthService {
 
         return ResponseEntity.ok().headers(responseHeaders).body(loginResponse);
     }
+    
     @Override
     public UserLoggedDto getUserLoggedInfo() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -197,6 +200,19 @@ public class AuthServiceImpl implements AuthService {
 
         return UserMapper.userToUserLoggedDto(user);
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     private void addAccessTokenCookie(HttpHeaders httpHeaders, Token token) {
         httpHeaders.add(HttpHeaders.SET_COOKIE, cookieUtil.createAccessTokenCookie(token.getValue(), accessTokenDurationSecond).toString());
     }
@@ -208,11 +224,13 @@ public class AuthServiceImpl implements AuthService {
         Set<Token> tokens = user.getTokens();
 
         tokens.forEach(token -> {
-            if(token.getExpiryDate().isBefore(LocalDateTime.now()))
-                tokenRepository.delete(token);
-            else if(!token.isDisabled()) {
-                token.setDisabled(true);
-                tokenRepository.save(token);
+            if(token.getExpiryDate().isBefore(LocalDateTime.now())) {// Nếu token trước thời gian hiện tại - chưa hết hạn
+            	tokenRepository.delete(token);
+            } else {// Nếu token quá thời hạn hiện tại
+            	if(!token.isDisabled()) {
+                    token.setDisabled(true);
+                    tokenRepository.save(token);
+                }	
             }
         });
     }

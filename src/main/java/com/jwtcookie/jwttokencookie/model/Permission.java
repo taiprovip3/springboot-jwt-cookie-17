@@ -14,7 +14,12 @@ import java.util.Set;
 @Entity
 @Table(name = "permissions", uniqueConstraints = {@UniqueConstraint(columnNames = {"resource", "operation"})})
 public class Permission implements GrantedAuthority {
-    @Id
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false)
