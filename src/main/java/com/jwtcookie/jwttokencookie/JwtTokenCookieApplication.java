@@ -1,4 +1,4 @@
-package com.jwtcookie.jwttokencookie;
+	package com.jwtcookie.jwttokencookie;
 
 import com.jwtcookie.jwttokencookie.enums.Roles;
 import com.jwtcookie.jwttokencookie.model.Role;
@@ -27,7 +27,6 @@ public class JwtTokenCookieApplication implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        createUsers();
     }
 
     public void createUsers() {

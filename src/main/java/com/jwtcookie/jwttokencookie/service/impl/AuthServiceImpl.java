@@ -89,6 +89,9 @@ public class AuthServiceImpl implements AuthService {
 
             // save tokens in db
             tokenRepository.saveAll(List.of(newAccessToken, newRefreshToken));
+            
+            System.out.println("newAccessToken=" + newAccessToken.getValue());
+            System.out.println("newRefreshToken=" + newRefreshToken.getValue());
 
             addAccessTokenCookie(responseHeaders, newAccessToken);
             addRefreshTokenCookie(responseHeaders, newRefreshToken);
@@ -104,6 +107,8 @@ public class AuthServiceImpl implements AuthService {
             );
 
             addAccessTokenCookie(responseHeaders, newAccessToken);
+            System.out.println("newAccessToken=" + newAccessToken.getValue());
+            System.out.println("newRefreshToken=" + refreshToken);
         }
 
         // 05. Nếu accessToken & refreshToken trong cookie hợp lệ
@@ -126,11 +131,13 @@ public class AuthServiceImpl implements AuthService {
 
             // save tokens in db
             tokenRepository.saveAll(List.of(newAccessToken, newRefreshToken));
+            System.out.println("newAccessToken=" + newAccessToken.getValue());
+            System.out.println("newRefreshToken=" + newRefreshToken.getValue());
 
             addAccessTokenCookie(responseHeaders, newAccessToken);
             addRefreshTokenCookie(responseHeaders, newRefreshToken);
         }
-
+        
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         LoginResponse loginResponse = new LoginResponse(true, user.getRole().getName());

@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.util.Set;
 
 @NoArgsConstructor
@@ -25,6 +27,7 @@ public class Role implements GrantedAuthority {
     @Column(unique = true, nullable = false)
     private String name;
     @OneToMany(mappedBy = "role")
+    @JsonManagedReference
     private Set<User> users;
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "role_permission", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "permission_id"))

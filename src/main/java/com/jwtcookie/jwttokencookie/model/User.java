@@ -2,9 +2,15 @@ package com.jwtcookie.jwttokencookie.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+
+import org.apache.commons.lang3.builder.ToStringExclude;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -28,11 +34,15 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String username;
+    @JsonIgnore
     private String password;
     @ManyToOne
+    @JsonBackReference
     private Role role;
     @OneToMany(mappedBy = "user")
+    @JsonManagedReference
     private Set<Token> tokens;
+    
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<String> authorities = new HashSet<>();

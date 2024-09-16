@@ -59,6 +59,7 @@ public class SecurityConfiguration {
                     authorize.requestMatchers("/api/auth/login").permitAll();
                     authorize.requestMatchers("/api/auth/refresh").permitAll();
                     authorize.requestMatchers("/api/auth/logout").hasAuthority(Permissions.USER_READ.getName());
+                    authorize.requestMatchers("/api/profiles/**").hasAuthority(Permissions.USER_READ.getName());
                     authorize.requestMatchers(HttpMethod.GET, "/api/users/**").hasAuthority(Permissions.USER_READ.getName());
                     authorize.requestMatchers(HttpMethod.POST, "/api/users/**").hasAuthority(Permissions.USER_CREATE.getName());
                     authorize.requestMatchers(HttpMethod.PUT, "/api/users/**").hasAuthority(Permissions.USER_UPDATE.getName());

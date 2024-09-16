@@ -1,6 +1,7 @@
 package com.jwtcookie.jwttokencookie.model;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.jwtcookie.jwttokencookie.enums.TokenType;
 import jakarta.persistence.*;
 import lombok.*;
@@ -23,5 +24,6 @@ public class Token {
     private LocalDateTime expiryDate;
     private boolean disabled;
     @ManyToOne
+    @JsonBackReference
     private User user;
 }
