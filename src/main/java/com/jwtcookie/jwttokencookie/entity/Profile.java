@@ -66,9 +66,14 @@ public class Profile implements Serializable {
     
     @PrePersist
     protected void onCreate() {
-        createdAt = LocalDateTime.now();
-        updatedAt = LocalDateTime.now();
-        avatar = "https://cdn-icons-png.flaticon.com/512/1132/1132921.png";
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+        this.avatar = "https://cdn-icons-png.flaticon.com/512/1132/1132921.png";
+        Wall wall = Wall
+        		.builder()
+        		.profile(this)
+        		.build();
+        System.out.println("New wall created=" + wall);
     }
 
     @PreUpdate

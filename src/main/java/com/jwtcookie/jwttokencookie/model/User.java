@@ -3,7 +3,6 @@ package com.jwtcookie.jwttokencookie.model;
 import jakarta.persistence.*;
 import lombok.*;
 
-import org.apache.commons.lang3.builder.ToStringExclude;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -42,6 +41,8 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user")
     @JsonManagedReference
     private Set<Token> tokens;
+    @Column(nullable = false)
+    private Boolean isDisabled = false;
     
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

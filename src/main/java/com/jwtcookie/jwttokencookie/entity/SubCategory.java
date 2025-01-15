@@ -3,7 +3,6 @@ package com.jwtcookie.jwttokencookie.entity;
 import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -25,8 +24,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @Data
 @Builder
-public class Address implements Serializable {
-	
+public class SubCategory implements Serializable {
+
 	/**
 	 * 
 	 */
@@ -35,14 +34,13 @@ public class Address implements Serializable {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private String fullName; // fullName new Receiver
-	private String phoneNumber; // phoneNumber new Receiver
-	private String countryCode;
-	private String address;
+	
+	private String name;
+	private String alias;
+	private String coverImage;
 	
 	@ManyToOne
-	@JoinColumn(name = "profile_id")
+	@JoinColumn(name = "category_id")
 	@JsonBackReference
-	@JsonIgnore
-	private Profile profile;
+	private Category category;
 }
