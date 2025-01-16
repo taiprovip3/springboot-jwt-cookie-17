@@ -2,10 +2,12 @@ package com.jwtcookie.jwttokencookie.controller;
 
 import com.jwtcookie.jwttokencookie.dto.LoginRequest;
 import com.jwtcookie.jwttokencookie.dto.LoginResponse;
+import com.jwtcookie.jwttokencookie.dto.RegisterRequest;
 import com.jwtcookie.jwttokencookie.dto.UserLoggedDto;
 import com.jwtcookie.jwttokencookie.service.AuthService;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,6 +19,12 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 	
     private final AuthService authService;
+    
+    @PostMapping("/register")
+    public ResponseEntity<?> register(
+            @Valid @RequestBody RegisterRequest registerRequest) {
+        return authService.register(registerRequest);
+    }
     
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(

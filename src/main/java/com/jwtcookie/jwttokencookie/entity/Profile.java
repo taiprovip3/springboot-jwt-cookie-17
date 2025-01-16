@@ -44,8 +44,6 @@ public class Profile implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String fullName;
-    @Column(unique = true)
-    private String email;
     private String phoneNumber;
     private String phoneCode;
     private String gender;

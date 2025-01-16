@@ -2,6 +2,8 @@ package com.jwtcookie.jwttokencookie.service;
 
 import com.jwtcookie.jwttokencookie.dto.LoginRequest;
 import com.jwtcookie.jwttokencookie.dto.LoginResponse;
+import com.jwtcookie.jwttokencookie.dto.RegisterRequest;
+import com.jwtcookie.jwttokencookie.dto.RegisterResponse;
 import com.jwtcookie.jwttokencookie.dto.UserLoggedDto;
 import org.springframework.http.ResponseEntity;
 
@@ -13,4 +15,6 @@ public interface AuthService {
     ResponseEntity<LoginResponse> logout(String accessToken, String refreshToken);
 
     UserLoggedDto getUserLoggedInfo();
+
+	ResponseEntity<RegisterResponse> register(RegisterRequest registerRequest);
 }

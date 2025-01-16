@@ -56,6 +56,7 @@ public class SecurityConfiguration {
         http
                 .authorizeHttpRequests(authorize -> {
                     authorize.requestMatchers(ALLOWED_URLS).permitAll();
+                    authorize.requestMatchers("/api/auth/register").permitAll();
                     authorize.requestMatchers("/api/auth/login").permitAll();
                     authorize.requestMatchers("/api/auth/refresh").permitAll();
                     authorize.requestMatchers("/api/auth/logout").hasAuthority(Permissions.USER_READ.getName());

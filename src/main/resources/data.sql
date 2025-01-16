@@ -1,25 +1,52 @@
+use pc;
 -- create roles
-insert into roles (id, name) value (1, 'ADMIN');
-insert into roles (id, name) value (2, 'MANAGER');
-insert into roles (id, name) value (3, 'USER');
+  -- multiple
+	insert into roles (id, name) values 
+										(1, 'ADMIN'),
+										(2, 'MANAGER'),
+										(3, 'USER');
+-- insert into roles (id, name) value (1, 'ADMIN');
+-- insert into roles (id, name) value (2, 'MANAGER');
+-- insert into roles (id, name) value (3, 'USER');
+
 
 -- create permissions
-insert into permissions (id, operation, resource) values (1, 'READ', 'USER');
-insert into permissions (id, operation, resource) values (2, 'CREATE', 'USER');
-insert into permissions (id, operation, resource) values (3, 'UPDATE', 'USER');
-insert into permissions (id, operation, resource) values (4, 'DELETE', 'USER');
+  -- multiple
+    insert into permissions (id, operation, resource) values
+														(1, 'READ', 'USER'),
+														(2, 'CREATE', 'USER'),
+														(3, 'UPDATE', 'USER'),
+														(4, 'DELETE', 'USER');
+-- insert into permissions (id, operation, resource) values (1, 'READ', 'USER');
+-- insert into permissions (id, operation, resource) values (2, 'CREATE', 'USER');
+-- insert into permissions (id, operation, resource) values (3, 'UPDATE', 'USER');
+-- insert into permissions (id, operation, resource) values (4, 'DELETE', 'USER');
 
+														
 -- link roles with permissions
--- role admin permissions
-insert into role_permission (role_id, permission_id) VALUES (1, 1);
-insert into role_permission (role_id, permission_id) VALUES (1, 2);
-insert into role_permission (role_id, permission_id) VALUES (1, 3);
-insert into role_permission (role_id, permission_id) VALUES (1, 4);
--- role manager permissions
-insert into role_permission (role_id, permission_id) VALUES (2, 1);
-insert into role_permission (role_id, permission_id) VALUES (2, 2);
--- role user permissions
-insert into role_permission (role_id, permission_id) VALUES (3, 1);
+  -- role admin permissions
+    -- multiple
+       insert into role_permission (role_id, permission_id) values
+   																(1, 1),
+   																(1, 2),
+   																(1, 3),
+   																(1, 4);
+-- insert into role_permission (role_id, permission_id) VALUES (1, 1);
+-- insert into role_permission (role_id, permission_id) VALUES (1, 2);
+-- insert into role_permission (role_id, permission_id) VALUES (1, 3);
+-- insert into role_permission (role_id, permission_id) VALUES (1, 4);
+
+  -- role manager permissions
+	-- multiple
+	  insert into role_permission (role_id, permission_id) values
+	  														(2, 1),
+  															(2, 2);
+-- insert into role_permission (role_id, permission_id) VALUES (2, 1);
+-- insert into role_permission (role_id, permission_id) VALUES (2, 2);
+  
+  -- role user permissions
+	insert into role_permission (role_id, permission_id) VALUES (3, 1);
+
 
 -- create catogory
 insert into category (id, alias, cover_image, name) VALUES (1, 'MAINBOARD', 'https://nguyencongpc.vn/media/product/23544-mainboard-msi-meg-z790-ace-ddr5-6.jpeg', 'Mainboard');

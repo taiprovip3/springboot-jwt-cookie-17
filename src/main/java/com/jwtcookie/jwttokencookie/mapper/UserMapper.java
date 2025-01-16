@@ -12,6 +12,7 @@ public class UserMapper {
         return new UserDto(
                 user.getId(),
                 user.getUsername(),
+                user.getEmail(),
                 user.getPassword(),
                 user.getRole().getAuthority(),
                 user.getRole().getPermissions().stream().map(Permission::getAuthority).collect(Collectors.toSet())

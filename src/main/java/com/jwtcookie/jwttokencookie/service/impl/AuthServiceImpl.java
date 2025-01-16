@@ -2,11 +2,14 @@ package com.jwtcookie.jwttokencookie.service.impl;
 
 import com.jwtcookie.jwttokencookie.dto.LoginRequest;
 import com.jwtcookie.jwttokencookie.dto.LoginResponse;
+import com.jwtcookie.jwttokencookie.dto.RegisterRequest;
+import com.jwtcookie.jwttokencookie.dto.RegisterResponse;
 import com.jwtcookie.jwttokencookie.dto.UserLoggedDto;
 import com.jwtcookie.jwttokencookie.exception.AppException;
 import com.jwtcookie.jwttokencookie.exception.ResourceNotFoundException;
 import com.jwtcookie.jwttokencookie.jwt.JwtTokenProvider;
 import com.jwtcookie.jwttokencookie.mapper.UserMapper;
+import com.jwtcookie.jwttokencookie.model.Role;
 import com.jwtcookie.jwttokencookie.model.Token;
 import com.jwtcookie.jwttokencookie.model.User;
 import com.jwtcookie.jwttokencookie.repository.TokenRepository;
@@ -23,6 +26,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -34,6 +38,7 @@ import java.util.Set;
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
+	
     @Value("${JWT_ACCESS_TOKEN_DURATION_MINUTE}")
     private long accessTokenDurationMinute;
     @Value("${JWT_ACCESS_TOKEN_DURATION_SECOND}")
@@ -47,6 +52,37 @@ public class AuthServiceImpl implements AuthService {
     private final JwtTokenProvider tokenProvider;
     private final CookieUtil cookieUtil;
     private final AuthenticationManager authenticationManager;
+    private final PasswordEncoder passwordEncoder;
+    
+    @Override
+	public ResponseEntity<RegisterResponse> register(RegisterRequest registerRequest) {
+    	System.out.println("AuthServiceImple register method is activing...");
+    	if(userRepository.existsByEmail(registerRequest.getEmail())) {
+    		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+    				.body(new RegisterResponse("Email đã được sử dụng!", null));
+    	}
+    	System.out.println("Bypass user existsByEmail...");
+    	if(userRepository.existsByEmail(registerRequest.getUsername())) {
+    		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+    				.body(new RegisterResponse("Username đã được sử dụng!", null));
+    	}
+    	System.out.println("Bypass user existsByUsername...");
+    	Role userRole = Role.builder()
+    			.id(Long.valueOf(1))
+    			.build();
+    	User userToRegister = User.builder()
+    			.username(registerRequest.getUsername())
+    			.email(registerRequest.getEmail())
+    			.password(hashPassword(registerRequest.getPassword()))
+    			.role(userRole)
+    			.isDisabled(false)
+    			.build();
+    	User newUser = userRepository.save(userToRegister);
+    	System.out.println("newUser=" + newUser);
+    	RegisterResponse registerResponse = new RegisterResponse("Đăng ký tài khoản thành công!", newUser.getId());
+		return ResponseEntity.status(HttpStatus.CREATED).body(registerResponse);
+	}
+    
     @Override
     public ResponseEntity<LoginResponse> login(LoginRequest loginRequest, String accessToken, String refreshToken) {
     	// 01. Sping security login account
@@ -220,6 +256,9 @@ public class AuthServiceImpl implements AuthService {
     
     
     
+    private String hashPassword(String password) {
+        return passwordEncoder.encode(password);
+    }
     private void addAccessTokenCookie(HttpHeaders httpHeaders, Token token) {
         httpHeaders.add(HttpHeaders.SET_COOKIE, cookieUtil.createAccessTokenCookie(token.getValue(), accessTokenDurationSecond).toString());
     }
@@ -241,4 +280,5 @@ public class AuthServiceImpl implements AuthService {
             }
         });
     }
+
 }
