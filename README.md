@@ -35,13 +35,13 @@ Follow these steps to build and run the project:
 1. Clone the repository:
 
 ```bash
- git clone https://github.com/hichambouttaj/jwt-access-refresh-cookie-spring-security.git
+ git clone -b purge-jwt https://github.com/taiprovip3/springboot-jwt-cookie-17.git
 ```
 
 2. Navigate to the project directory:
    
 ```bash
- cd jwt-access-refresh-cookie-spring-security
+ cd springboot-jwt-cookie-17-main
 ```
 
 3. Create a MySQL database named "jwt_cookie."
@@ -62,3 +62,5 @@ The application will be available at http://localhost:8080.
 Note: Avoiding cors, changing origin `http://localhost:5173` to your client url call in `SecurityConfiguration.java`.
 
 Feel free to explore the code, customize it to your needs, and use it as a reference for implementing secure authentication and authorization in your own Spring Boot projects.
+
+Thanks to [hichambouttaj](https://github.com/hichambouttaj/jwt-access-refresh-cookie-spring-security)!

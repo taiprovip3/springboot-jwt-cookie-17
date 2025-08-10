@@ -20,9 +20,3 @@ insert into role_permission (role_id, permission_id) VALUES (2, 1);
 insert into role_permission (role_id, permission_id) VALUES (2, 2);
 -- role user permissions
 insert into role_permission (role_id, permission_id) VALUES (3, 1);
-
-
-
-
-
-

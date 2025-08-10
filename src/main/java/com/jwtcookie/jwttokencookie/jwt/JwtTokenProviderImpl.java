@@ -26,10 +26,12 @@ import java.util.function.Function;
 @Service
 @RequiredArgsConstructor
 public class JwtTokenProviderImpl implements JwtTokenProvider{
+	
     @Value("${JWT_TOKEN_SECRET}")
     private String jwtSecret;
     private final TokenRepository tokenRepository;
     private final UserRepository userRepository;
+    
     @Override
     public Token generateAccessToken(Map<String, Object> extraClaims, long duration, TemporalUnit durationType, UserDetails user) {
         String username = user.getUsername();
