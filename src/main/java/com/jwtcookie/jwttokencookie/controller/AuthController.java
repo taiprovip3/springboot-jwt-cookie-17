@@ -5,7 +5,6 @@ import com.jwtcookie.jwttokencookie.dto.LoginResponse;
 import com.jwtcookie.jwttokencookie.dto.UserLoggedDto;
 import com.jwtcookie.jwttokencookie.service.AuthService;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,28 +18,23 @@ public class AuthController {
     private final AuthService authService;
     
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(
-            @CookieValue(name = "access_token", required = false) String accessToken,
-            @CookieValue(name = "refresh_token", required = false) String refreshToken,
-            @RequestBody LoginRequest loginRequest) {
-        return authService.login(loginRequest, accessToken, refreshToken);
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
+        return authService.login(loginRequest);
     }
     
     @PostMapping("/refresh")
-    public ResponseEntity<LoginResponse> refreshToken(@CookieValue(name = "refresh_token", required = true) String refreshToken) {
-        return authService.refresh(refreshToken);
+    public ResponseEntity<?> refreshToken() {
+        return authService.refresh();
     }
     
     @PostMapping("/logout")
-    public ResponseEntity<LoginResponse> logout(
-            @CookieValue(name = "access_token", required = false) String accessToken,
-            @CookieValue(name = "refresh_token", required = false) String refreshToken) {
-        return authService.logout(accessToken, refreshToken);
+    public ResponseEntity<LoginResponse> logout() {
+        return authService.logout();
     }
     
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/info")
-    public ResponseEntity<UserLoggedDto> userLoggedInfo(HttpServletRequest request) {
+    public ResponseEntity<UserLoggedDto> userLoggedInfo() {
         return ResponseEntity.ok(authService.getUserLoggedInfo());
     }
 }

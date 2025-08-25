@@ -29,6 +29,8 @@ public class User implements UserDetails {
     private Long id;
     private String username;
     private String password;
+    @Column(unique = true)
+    private String email;
     @ManyToOne
     private Role role;
     @OneToMany(mappedBy = "user")

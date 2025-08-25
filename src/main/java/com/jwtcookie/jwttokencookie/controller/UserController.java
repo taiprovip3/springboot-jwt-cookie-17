@@ -13,21 +13,26 @@ import java.util.List;
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class UserController {
+	
     private final UserService userService;
+    
     @PostMapping
     public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
         UserDto response = userService.create(userDto);
         return ResponseEntity.created(URI.create("/api/users/" + response.id())).body(response);
     }
+    
     @GetMapping("/{userId}")
     public ResponseEntity<UserDto> getUser(@PathVariable(name = "userId") Long userId) {
         UserDto response = userService.getUser(userId);
         return ResponseEntity.ok(response);
     }
+    
     @GetMapping
     public ResponseEntity<List<UserDto>> getUsers() {
         return ResponseEntity.ok(userService.getUsers());
     }
+    
     @PutMapping("/{userId}")
     public ResponseEntity<UserDto> updateUser(
             @PathVariable(name = "userId") Long userId,
@@ -36,6 +41,7 @@ public class UserController {
         UserDto response = userService.updateUser(userId, userDto);
         return ResponseEntity.ok(response);
     }
+    
     @DeleteMapping("/{userId}")
     public ResponseEntity<?> deleteUser(
             @PathVariable(name = "userId") Long userId

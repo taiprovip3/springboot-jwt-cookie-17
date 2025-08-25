@@ -18,10 +18,14 @@ public class Token {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Enumerated(EnumType.STRING)
     private TokenType type;
     private String value;
     private LocalDateTime expiryDate;
     private boolean disabled;
+    private String device;
+    private String ip;
+    private String location;
     @ManyToOne
     private User user;
 }

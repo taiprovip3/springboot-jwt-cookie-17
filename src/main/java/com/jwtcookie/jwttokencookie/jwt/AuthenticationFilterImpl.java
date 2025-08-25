@@ -13,7 +13,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import java.io.IOException;
 
 public class AuthenticationFilterImpl extends UsernamePasswordAuthenticationFilter {
+	
     private final AuthenticationManager authenticationManager;
+    
     public AuthenticationFilterImpl(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
     }
@@ -26,6 +28,7 @@ public class AuthenticationFilterImpl extends UsernamePasswordAuthenticationFilt
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
         return authenticationManager.authenticate(authenticationToken);
     }
+    
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         super.successfulAuthentication(request, response, chain, authResult);

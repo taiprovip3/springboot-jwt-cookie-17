@@ -65,7 +65,7 @@ public class SecurityConfiguration {
                     authorize.requestMatchers(HttpMethod.DELETE, "/api/users/**").hasAuthority(Permissions.USER_DELETE.getName());
 //                    authorize.anyRequest().permitAll();
                     authorize.anyRequest().authenticated();
-                });
+                });// ✅ bật HTTP Basic (browser popup)
         http
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http

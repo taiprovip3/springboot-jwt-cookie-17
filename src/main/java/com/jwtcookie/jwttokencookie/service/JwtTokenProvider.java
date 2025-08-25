@@ -1,4 +1,4 @@
-package com.jwtcookie.jwttokencookie.jwt;
+package com.jwtcookie.jwttokencookie.service;
 
 import com.jwtcookie.jwttokencookie.model.Token;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -2,8 +2,8 @@ package com.jwtcookie.jwttokencookie.jwt;
 
 import com.jwtcookie.jwttokencookie.enums.TokenType;
 import com.jwtcookie.jwttokencookie.model.Token;
-import com.jwtcookie.jwttokencookie.repository.TokenRepository;
-import com.jwtcookie.jwttokencookie.repository.UserRepository;
+import com.jwtcookie.jwttokencookie.service.JwtTokenProvider;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -25,29 +25,31 @@ import java.util.function.Function;
 
 @Service
 @RequiredArgsConstructor
-public class JwtTokenProviderImpl implements JwtTokenProvider{
+public class JwtTokenProviderImpl implements JwtTokenProvider {
 	
     @Value("${JWT_TOKEN_SECRET}")
     private String jwtSecret;
-    private final TokenRepository tokenRepository;
-    private final UserRepository userRepository;
     
     @Override
     public Token generateAccessToken(Map<String, Object> extraClaims, long duration, TemporalUnit durationType, UserDetails user) {
         String username = user.getUsername();
-
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime expiryDate = now.plus(duration, durationType);
-
-        String token = Jwts.builder()
+        String value = Jwts.builder()
                 .setClaims(extraClaims)
                 .setSubject(username)
                 .setIssuedAt(toDate(now))
                 .setExpiration(toDate(expiryDate))
                 .signWith(decodeSecretKey(jwtSecret), SignatureAlgorithm.HS256)
                 .compact();
-
-        return new Token(0L, TokenType.ACCESS, token, expiryDate, false, null);
+        Token token = Token.builder()
+        		.type(TokenType.ACCESS)
+        		.value(value)
+        		.expiryDate(expiryDate)
+        		.disabled(false)
+        		.build();
+        return token;
+//        return new Token(0L, TokenType.ACCESS, token, expiryDate, false, null);
     }
 
     @Override
@@ -57,14 +59,20 @@ public class JwtTokenProviderImpl implements JwtTokenProvider{
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime expiryDate = now.plus(duration, durationType);
 
-        String token = Jwts.builder()
+        String value = Jwts.builder()
                 .setSubject(username)
                 .setIssuedAt(toDate(now))
                 .setExpiration(toDate(expiryDate))
                 .signWith(decodeSecretKey(jwtSecret), SignatureAlgorithm.HS256)
                 .compact();
-
-        return new Token(0L, TokenType.REFRESH, token, expiryDate, false, null);
+        Token token = Token.builder()
+        		.type(TokenType.REFRESH)
+        		.value(value)
+        		.expiryDate(expiryDate)
+        		.disabled(false)
+        		.build();
+        return token;
+//        return new Token(0L, TokenType.REFRESH, token, expiryDate, false, null);
     }
 
     @Override
@@ -81,22 +89,27 @@ public class JwtTokenProviderImpl implements JwtTokenProvider{
             return false;
         }
     }
+    
     @Override
     public String getUsernameFromToken(String tokenValue) {
         return extractClaim(tokenValue, Claims::getSubject);
     }
+    
     @Override
     public LocalDateTime getExpiryDateFromToken(String tokenValue) {
         return toLocalDateTime(extractClaim(tokenValue, Claims::getExpiration));
     }
+    
     private Key decodeSecretKey(String secret) {
         byte[] decodedKey = Base64.getDecoder().decode(secret);
         return Keys.hmacShaKeyFor(decodedKey);
     }
+    
     private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
+    
     private Claims extractAllClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(decodeSecretKey(jwtSecret))
@@ -104,10 +117,12 @@ public class JwtTokenProviderImpl implements JwtTokenProvider{
                 .parseClaimsJws(token)
                 .getBody();
     }
+    
     private Date toDate(LocalDateTime localDateTime) {
         ZoneOffset zoneOffset = ZoneOffset.UTC;
         return Date.from(localDateTime.toInstant(zoneOffset));
     }
+    
     private LocalDateTime toLocalDateTime(Date date) {
         ZoneOffset zoneOffset = ZoneOffset.UTC;
         return date.toInstant().atOffset(zoneOffset).toLocalDateTime();

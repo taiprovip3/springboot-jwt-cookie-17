@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 
 @RestControllerAdvice
 public class AppExceptionHandler {
+	
     @ExceptionHandler(AppException.class)
     public ResponseEntity<ErrorDetails> appExceptionHandler(AppException e, WebRequest request) {
         ErrorDetails error = new ErrorDetails(
@@ -21,6 +22,7 @@ public class AppExceptionHandler {
         );
         return new ResponseEntity<>(error, e.getStatus());
     }
+    
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorDetails> globalExceptionHandler(Exception e, WebRequest request) {
         ErrorDetails error = new ErrorDetails(

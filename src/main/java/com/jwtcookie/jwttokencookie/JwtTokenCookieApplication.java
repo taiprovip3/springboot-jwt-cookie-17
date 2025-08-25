@@ -31,8 +31,7 @@ public class JwtTokenCookieApplication implements ApplicationRunner {
     }
 
     public void createUsers() {
-        if(!userRepository.findAll().isEmpty())
-            return;
+        if(!userRepository.findAll().isEmpty()) return;
 
         Role roleAdmin = roleRepository.findByName(Roles.ADMIN.name()).get();
         Role roleUser = roleRepository.findByName(Roles.USER.name()).get();

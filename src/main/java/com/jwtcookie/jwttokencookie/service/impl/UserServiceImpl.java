@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
 
         // get role from db
         Role role = roleRepository.findByName(userDto.role()).orElseThrow(
-                () -> new ResourceNotFoundException("Role not found")
+        	() -> new ResourceNotFoundException("Role not found!")
         );
 
         user.setRole(role);
@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto getUser(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(
-                () -> new ResourceNotFoundException("User not found")
+        	() -> new ResourceNotFoundException("User not found")
         );
         return UserMapper.userToUserDto(user);
     }
@@ -51,12 +51,12 @@ public class UserServiceImpl implements UserService {
     public UserDto updateUser(Long userId, UserDto userDto) {
         // get user from db
         User user = userRepository.findById(userId).orElseThrow(
-                () -> new ResourceNotFoundException("User not found")
+        	() -> new ResourceNotFoundException("User not found")
         );
 
         // get role from db
         Role role = roleRepository.findByName(userDto.role()).orElseThrow(
-                () -> new ResourceNotFoundException("Role not found")
+        	() -> new ResourceNotFoundException("Role not found")
         );
 
         user.setUsername(userDto.username());
@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserService {
     public String deleteUser(Long userId) {
         // get user from db
         User user = userRepository.findById(userId).orElseThrow(
-                () -> new ResourceNotFoundException("User not found")
+        	() -> new ResourceNotFoundException("User not found")
         );
 
         userRepository.delete(user);
